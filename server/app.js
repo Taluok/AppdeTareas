@@ -14,15 +14,19 @@ import {
 
 import cors from "cors";
 
+// Configuración de CORS para permitir solicitudes desde el frontend
 const corsOption = {
-    origin: "https://127.0.0.1:5173",
-    methods: ["POST", "GET"],
-    credentials: true,
+    origin: "https://127.0.0.1:5173", // Origen permitido para las solicitudes
+    methods: ["POST", "GET"], // Métodos permitidos
+    credentials: true, // Permite el envío de cookies y cabeceras de autenticación
 }
-const app = express();
-app.use(express.json());
-app.use(cors(corsOption))
 
+// Inicializa la aplicación Express
+const app = express();
+app.use(express.json()); // Middleware para parsear JSON en las solicitudes
+app.use(cors(corsOption)) // Middleware para habilitar CORS con la configuración especificada
+
+// Ruta para obtener todos los "todos" por ID
 app.get("/todos/:id", async (req, res) => {
     try {
         const todos = await getTodosByID(req.params.id);
@@ -32,6 +36,7 @@ app.get("/todos/:id", async (req, res) => {
     }
 });
 
+// Ruta para obtener un "todo" compartido por ID
 app.get("/todos/shared_todos/:id", async (req, res) => {
     try {
         const todo = await getSharedTodoById(req.params.id);
@@ -46,6 +51,7 @@ app.get("/todos/shared_todos/:id", async (req, res) => {
     }
 });
 
+// Ruta para obtener un usuario por ID
 app.get("/users/:id", async (req, res) => {
     try {
         const user = await getUserById(req.params.id);
@@ -58,6 +64,7 @@ app.get("/users/:id", async (req, res) => {
     }
 });
 
+// Ruta para actualizar el estado de completado de un "todo"
 app.put("/todos/:id", async (req, res) => {
     const { value } = req.body;
     try {
@@ -68,6 +75,7 @@ app.put("/todos/:id", async (req, res) => {
     }
 });
 
+// Ruta para eliminar un "todo" por ID
 app.delete("/todos/:id", async (req, res) => {
     try {
         await deleteTodo(req.params.id);
@@ -77,6 +85,7 @@ app.delete("/todos/:id", async (req, res) => {
     }
 });
 
+// Ruta para compartir un "todo" con otro usuario
 app.post("/todos/shared_todos", async (req, res) => {
     const { todo_id, user_id, email } = req.body;
     try {
@@ -91,6 +100,7 @@ app.post("/todos/shared_todos", async (req, res) => {
     }
 });
 
+// Ruta para crear un nuevo "todo"
 app.post("/todos", async (req, res) => {
     const { user_id, title } = req.body;
     try {
@@ -101,9 +111,11 @@ app.post("/todos", async (req, res) => {
     }
 });
 
+// Inicia el servidor en el puerto 8080
 app.listen(8080, () => {
     console.log("Servidor corriendo en el puerto 8080");
 });
+
 
 
 
