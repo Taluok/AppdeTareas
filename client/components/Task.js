@@ -2,6 +2,9 @@ import { View, Text, TouchableOpacity, Pressable, StyleSheet } from "react-nativ
 import { Feather } from "@expo/vector-icons";
 import * as React from "react";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import SharedTodoModalContext from "./SharedTodoModalContent";
+import bottomSheet from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheet";
+import TodoModalContent from "./TodoModalContent";
 
 // Componente CheckMark para mostrar el botón de verificación de la tarea
 function CheckMark({ id, completed, toggleTodo }) {
@@ -111,6 +114,16 @@ export default function Task({
             <BottomSheetModal ref={sharedBottomSheetRef}
                 snapPoint={snapPointShared}
                 backgroundStyle={{borderRadius: 50, borderWidth: 4}}>
+
+                <SharedTodoModalContext
+                id={id}
+                title={title}
+                shared_with_id={shared_with_id}
+                completed={completed}
+                />    
+            </BottomSheetModal>
+            <BottomSheetModal ref={bottomSheetModalRef} index={2} snapPoints={snapPoints} backgroundStyle={{borderRadius: 50, borderWidth: 4}}>
+                <TodoModalContent id={id} title={title}></TodoModalContent>
             </BottomSheetModal>
         </TouchableOpacity>
     );
