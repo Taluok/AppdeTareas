@@ -21,9 +21,6 @@ export default function SharedTodoModalContext({
         const response = await fetch(
             `http://localhost:8080/todos/shared_todos/${id}`,
             {
-                headers: {
-                    "x-api-key": "abcdef123456",
-                },
                 method: "GET",
             }
         );
@@ -48,7 +45,7 @@ export default function SharedTodoModalContext({
                     {completed === 1 ? "Completed" : "Incomplete"}
                 </Text>
             </View>
-            
+
         </View>
     );
 }

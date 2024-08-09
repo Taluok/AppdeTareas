@@ -5,6 +5,7 @@ import { FlatList } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Task from "./components/Task";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import InputTask from "./components/InputTask"
 
 // Componente principal de la aplicación
 export default function App() {
@@ -40,7 +41,7 @@ export default function App() {
     return (
         <BottomSheetModalProvider>
             <View style={styles.container}>
-                <SafeAreaView>
+                <SafeAreaView style={styles.container}>
                     {/* FlatList para renderizar la lista de todos */}
                     <FlatList
                         data={todos} // Datos a renderizar
@@ -51,6 +52,7 @@ export default function App() {
                         ListHeaderComponent={() => <Text style={styles.title}>Today</Text>} // Encabezado de la lista
                         contentContainerStyle={styles.contentContainerStyle} // Estilo para el contenedor de contenido
                     />
+                    <InputTask todos={todos} setTodos={setTodos}/>
                 </SafeAreaView>
                 <StatusBar style="auto" /> {/* Barra de estado de Expo */}
             </View>
