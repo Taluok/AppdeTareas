@@ -12,15 +12,15 @@ import {
     Animated,
     Platform,
 } from "react-native";
-import { AntDesing } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons"; 
 
 export default function InputTask({ todos, setTodos }) {
-    const [showEmojis, setShowEmojis] = useState(false);
-    const [messageBody, setMessageBody] = useState("");
-    const [fadeAnim] = useState(new Animated.Value(0.1));
+    const [showEmojis, setShowEmojis] = useState(false); // Estado para controlar la visibilidad de los emojis
+    const [messageBody, setMessageBody] = useState(""); // Estado para almacenar el texto ingresado
+    const fadeAnim = useState(new Animated.Value(0.1))[0]; // Inicialización de la animación de opacidad
 
     useEffect(() => {
-        const showSubscriptions = Keyboard.addListener("keyboardWillShow", () => {
+        const showSubscription = Keyboard.addListener("keyboardWillShow", () => {
             setShowEmojis(true);
             Animated.timing(fadeAnim, {
                 toValue: 1,
@@ -28,27 +28,27 @@ export default function InputTask({ todos, setTodos }) {
                 useNativeDriver: true,
             }).start();
         });
-        const hideSubscriptions = Keyboard.addListener("keyboardWillHide", () => {
+        const hideSubscription = Keyboard.addListener("keyboardWillHide", () => {
             setShowEmojis(false);
             Animated.timing(fadeAnim, {
                 toValue: 0,
                 duration: 1000,
                 useNativeDriver: true,
             }).start();
-        })
+        });
         return () => {
-            showSubscription.remove();
-            hideSubscription.remove()
+            showSubscription.remove(); 
+            hideSubscription.remove(); 
         };
-    }, []);
+    }, [fadeAnim]);
 
     const handleSubmit = async () => {
         if (messageBody === "") {
             return;
         } else {
-            const response = await fetch("hhtp://localhost:8080/todos", {
+            const response = await fetch("http://localhost:8080/todos", { 
                 headers: {
-                    "x-api-key": "abcsdef123456",
+                    "x-api-key": "abcdef123456", 
                     "Content-Type": "application/json",
                 },
                 method: "POST",
@@ -60,14 +60,18 @@ export default function InputTask({ todos, setTodos }) {
             const newTodo = await response.json();
             setTodos([...todos, { ...newTodo, shared_with_id: null }]);
             Keyboard.dismiss();
-            setMessageBody("");
+            setMessageBody(""); // Limpiar el campo de texto después de enviar
         }
     };
 
     const RenderEmoji = ({ emoji }) => {
         return (
-            <TouchableHighlight activeOpacity={1} underlayColor={"transparent"} onPress={() => { setMessageBody(messageBody + emoji) }}>
-                <Text style={StyleSheet.emoji}>{emoji}</Text>
+            <TouchableHighlight
+                activeOpacity={1}
+                underlayColor={"transparent"}
+                onPress={() => setMessageBody(messageBody + emoji)}
+            >
+                <Text style={styles.emoji}>{emoji}</Text> 
             </TouchableHighlight>
         );
     };
@@ -78,7 +82,7 @@ export default function InputTask({ todos, setTodos }) {
             style={{ flex: 1 }} // Asegúrate de que el KeyboardAvoidingView ocupe todo el espacio disponible
         >
             <View style={styles.container}>
-                {showEmojies && (
+                {showEmojis && (
                     <Animated.View
                         style={[
                             styles.emojisContainer,
@@ -87,23 +91,30 @@ export default function InputTask({ todos, setTodos }) {
                             },
                         ]}
                     >
-                        <RenderEmoji emoji="✅"/>
-                        <RenderEmoji emoji="🚨"/>
-                        <RenderEmoji emoji="📝"/>
-                        <RenderEmoji emoji="🎁"/>
-                        <RenderEmoji emoji="🎮"/>
-                        <RenderEmoji emoji="🎉"/>
-                        <RenderEmoji emoji="🏃‍♀️"/>
+                        <RenderEmoji emoji="✅" />
+                        <RenderEmoji emoji="🚨" />
+                        <RenderEmoji emoji="📝" />
+                        <RenderEmoji emoji="🎁" />
+                        <RenderEmoji emoji="🎮" />
+                        <RenderEmoji emoji="🎉" />
+                        <RenderEmoji emoji="🏃‍♀️" />
                     </Animated.View>
                 )}
                 <View style={styles.inputContainer}>
-                    <TextInput style={styles.containerTextInput} placeholder='Write a new task' scrollEnabled={true} onChangeText={setMessageBody}defaultValue={messageBody}/>
+                    <TextInput
+                        style={styles.containerTextInput}
+                        placeholder='Write a new task'
+                        scrollEnabled={true}
+                        onChangeText={setMessageBody}
+                        value={messageBody} 
+                    />
                     <Pressable onPress={handleSubmit}>
-                        <AntDesing 
-                        name="checkcircle"
-                        size={40}
-                        color={messageBody ? "black" : "#00000050"}
-                        style={{ paddingLeft: 5}}/>
+                        <AntDesign 
+                            name="checkcircle"
+                            size={40}
+                            color={messageBody ? "black" : "#00000050"}
+                            style={{ paddingLeft: 5 }}
+                        />
                     </Pressable>
                 </View>
             </View>
@@ -117,23 +128,23 @@ const styles = StyleSheet.create({
     container: {
         borderTopWidth: 0.2,
         borderTopColor: "#00000030",
-        alingItems: "baseline",
+        alignItems: "baseline", 
     },
-    emojiesContainer: {
+    emojisContainer: {
         width: "100%",
         flexDirection: "row",
-        alingItems: "baseline",
+        alignItems: "baseline", 
         justifyContent: "space-between",
         paddingLeft: 10,
         marginVertical: 10,
     },
-    emojis:{
+    emoji: { 
         fontSize: 25,
         paddingVertical: 5,
         marginRight: 10,
     },
     containerTextInput: {
-        width: windowWidth -100,
+        width: windowWidth - 100,
         borderWidth: 1,
         borderRadius: 30,
         minHeight: 45,
@@ -146,4 +157,11 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         fontWeight: "600",
     },
-})
+    inputContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingBottom: 10,
+        paddingHorizontal: 10,
+    },
+});
